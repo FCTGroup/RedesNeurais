@@ -34,6 +34,10 @@ public class Rede {
         
         private int quantidadeElementosCamadaOculta;
         
+        private int quantidadeElementosCamadaEntrada;
+        
+        private int quantidadeElementosCamadaSaida;
+        
         public Rede(){
             erro = 0.0f;
             funcaoTransferencia =  FUNCAO_LOGISTICA;
@@ -46,6 +50,8 @@ public class Rede {
             matrizAmostras = null;
             quantidadeAmostras = 0;
             quantidadeElementosCamadaOculta = 0;
+            quantidadeElementosCamadaEntrada = 0;
+            quantidadeElementosCamadaSaida = 0;
         }
 
 	public void carregaArquivoTreinamento(String url) {
@@ -61,8 +67,63 @@ public class Rede {
 	}
 
 	public void testar() {
-
+            float[] vetorResultado;
+            float[] vetorEntrada;
+            float resultadoAtual;
+            int posicaoResultadoDaAmostra = quantidadeElementosCamadaEntrada;
+            int posicaoResultadoAtual;
+            int resultadoEsperado;
+            int resultadoObtido;
+            
+            for(int numeroAmostra = 0; numeroAmostra < quantidadeAmostras; numeroAmostra++){
+                vetorEntrada = matrizAmostras[numeroAmostra];
+                vetorResultado = calcular(vetorEntrada);
+                
+                resultadoEsperado = (int)matrizAmostras[numeroAmostra][posicaoResultadoDaAmostra];
+                
+                posicaoResultadoAtual = 0;
+                resultadoAtual = 0;
+                resultadoObtido = 0;
+                while(posicaoResultadoAtual < quantidadeElementosCamadaSaida){
+                    if(vetorResultado[posicaoResultadoAtual] > resultadoAtual){
+                        resultadoAtual = vetorResultado[posicaoResultadoAtual];
+                        resultadoObtido = posicaoResultadoAtual;
+                    }
+                    posicaoResultadoAtual++;
+                }
+                matrizConfusao[resultadoEsperado][resultadoObtido]++;
+            }
 	}
+        
+        public float[] calcular(float entrada[]){
+            float vetorResultado[] = new float[quantidadeElementosCamadaSaida];
+            int numeroNeuronio = 0;
+            
+            for(; numeroNeuronio < quantidadeElementosCamadaEntrada; numeroNeuronio++){
+                listaNeuronioEntrada.get(numeroNeuronio).setValor(
+                        entrada[numeroNeuronio]);
+                listaNeuronioEntrada.get(numeroNeuronio).atualizaProximaCamada();
+            }
+            
+            for(NeuronioOculto neuronio:listaNeuronioOculto){
+                if(funcaoTransferencia == FUNCAO_LOGISTICA)
+                    neuronio.calculaValorComFuncaoLogistica();
+                else if(funcaoTransferencia == FUNCAO_TANGENTE_HIPERBOLICA)
+                    neuronio.calculaValorComFuncaoTangenteHiperbolica();
+                neuronio.atualizaProximaCamada();
+            }
+            
+            numeroNeuronio = 0;
+            for(NeuronioSaida neuronio:listaNeuronioSaida){
+                if(funcaoTransferencia == FUNCAO_LOGISTICA)
+                    neuronio.calculaValorComFuncaoLogistica();
+                else if(funcaoTransferencia == FUNCAO_TANGENTE_HIPERBOLICA)
+                    neuronio.calculaValorComFuncaoTangenteHiperbolica();
+                vetorResultado[numeroNeuronio++] = neuronio.getValor();
+            }
+            
+            return vetorResultado;
+        }
 
 	public void treinar(int quantidadeIteracoes) {
             int contadorDeIteracoes = 0;
