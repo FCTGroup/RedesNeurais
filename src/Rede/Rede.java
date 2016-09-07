@@ -65,11 +65,19 @@ public class Rede {
 	}
 
 	public void treinar(int quantidadeIteracoes) {
-
+            int contadorDeIteracoes = 0;
+            do{
+                for(int numeroAmostra = 0; numeroAmostra < quantidadeAmostras; numeroAmostra++)
+                    iterar(numeroAmostra);
+                contadorDeIteracoes++;
+            }while(contadorDeIteracoes < quantidadeIteracoes);
 	}
 
 	public void treinar(float erroMaximo) {
-
+            do{
+                for(int numeroAmostra = 0; numeroAmostra < quantidadeAmostras; numeroAmostra++)
+                    iterar(numeroAmostra);
+            }while(erro > erroMaximo);
 	}
 
 	private void iterar(int numeroAmostra) {
