@@ -9,13 +9,15 @@ public class NeuronioOculto extends Neuronio {
     private float net;
     private final ArrayList<Float> listaPesos;
     private final ArrayList<Float> listaEntrada;
-
+    private float erro;
+    
     public NeuronioOculto(@NotNull final int numeroIdentificador) {
         super(numeroIdentificador);
         listaNeuroniosCamadaSaida = null;
         listaEntrada = new ArrayList<Float>();
         listaPesos = new ArrayList<Float>();
         net = 0.0f;
+        erro = 0.0f;
     }
     
     public void setEntrada(int identificador, float valor){
@@ -51,6 +53,29 @@ public class NeuronioOculto extends Neuronio {
     
     public float getNET(){
         return net;
+    }
+    
+    public void calculaErroLogistico(){
+        erro = 0.0f;
+        for(NeuronioSaida neuronio:listaNeuroniosCamadaSaida)
+            erro += neuronio.getErro()*neuronio.getPeso(numeroIdentificador);
+        erro *= (valor*(1 - valor));
+        
+    }
+    
+    public void calculaErroTangenteHiperbolico(){
+        erro = 0.0f;
+        for(NeuronioSaida neuronio:listaNeuroniosCamadaSaida)
+            erro += neuronio.getErro()*neuronio.getPeso(numeroIdentificador);
+        erro *= (1 - valor*valor);
+    }
+    
+    public float getPeso(int identificador){
+        return listaPesos.get(identificador);
+    }
+    
+    public float getErro(){
+        return erro;
     }
 
 }

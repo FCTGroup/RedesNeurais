@@ -16,5 +16,9 @@ public abstract class Neuronio {
     public float getValor() {
         return valor;
     }
+    
+    public int getNumeroIdentificador(){
+        return numeroIdentificador;
+    }
 
 }

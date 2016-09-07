@@ -15,6 +15,7 @@ public class NeuronioSaida extends Neuronio {
         listaEntrada = new ArrayList<Float>();
         listaPesos = new ArrayList<Float>();
         net = 0.0f;
+        erro = 0.0f;
     }
     
     public void setEntrada(int identificador, float valor){
@@ -23,6 +24,10 @@ public class NeuronioSaida extends Neuronio {
     
     public void setPeso(int identificador, float valor){
         listaPesos.set(identificador, valor);
+    }
+    
+    public float getPeso(int identificador){
+        return listaPesos.get(identificador);
     }
 
     public void calculaValorComFuncaoLogistica() {
