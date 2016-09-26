@@ -1,5 +1,6 @@
 package Rede;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Rede {
@@ -54,16 +55,46 @@ public class Rede {
             quantidadeElementosCamadaSaida = 0;
         }
 
-	public void carregaArquivoTreinamento(String url) {
+	public void carregaArquivoTreinamento(String url) throws IOException {
+            LeitorDeCSV leitorTreinamento = new LeitorDeCSV();
+            ArrayList<Integer[]> valoresTreinamento = leitorTreinamento.lerArquivoDeValores(url);
+            int numeroDeLinhas=valoresTreinamento.get(0).length, numeroDeColunas=valoresTreinamento.size();
+        
+             this.matrizAmostras= new float[numeroDeLinhas][numeroDeColunas]; 
+            //LACO PRA CONVERTER A ESTRUTURA matriz array normal
+                for(int i=0;i<numeroDeLinhas;i++){
+                    Integer[] valores = valoresTreinamento.get(i);
+                    for(int j=0;j<numeroDeColunas;j++){
+                        this.matrizAmostras[i][j]= valores[j];
+                    }
+                }
+            //
+            
+            //Calculado quantidade de Neuronios de Cada Camada
+            this.quantidadeElementosCamadaEntrada=numeroDeColunas-1;
+            this.quantidadeElementosCamadaOculta = this.quantidadeElementosCamadaEntrada*2;
+            this.quantidadeElementosCamadaSaida =this.quantidadeElementosCamadaEntrada;
+            
+            //TODO CRIAR A CONEXAO DOS NEURONIOS
+	}
+
+	public void criarConexaoNeuronios() {
 
 	}
 
-	private void criarConexaoNeuronios() {
-
-	}
-
-	public void carregaArquivoTeste(String url) {
-
+	public void carregaArquivoTeste(String url) throws IOException {
+            LeitorDeCSV leitorTreinamento = new LeitorDeCSV();
+            ArrayList<Integer[]> valoresTreinamento = leitorTreinamento.lerArquivoDeValores(url);
+            int numeroDeLinhas=valoresTreinamento.get(0).length, numeroDeColunas=valoresTreinamento.size();
+        
+             this.matrizAmostras= new float[numeroDeLinhas][numeroDeColunas]; 
+            //LACO PRA CONVERTER A ESTRUTURA matriz array normal
+                for(int i=0;i<numeroDeLinhas;i++){
+                    Integer[] valores = valoresTreinamento.get(i);
+                    for(int j=0;j<numeroDeColunas;j++){
+                        this.matrizAmostras[i][j]= valores[j];
+                    }
+                }
 	}
 
 	public void testar() {
@@ -91,7 +122,7 @@ public class Rede {
                     }
                     posicaoResultadoAtual++;
                 }
-                matrizConfusao[resultadoEsperado][resultadoObtido]++;
+                matrizConfusao[resultadoEsperado][resultadoObtido]++;//isto esta certo? a matriz recebe ++, ta estranho 
             }
 	}
         
@@ -258,4 +289,121 @@ public class Rede {
             });
     }
 
+    public ArrayList<NeuronioEntrada> getListaNeuronioEntrada() {
+        return listaNeuronioEntrada;
+    }
+
+    public void setListaNeuronioEntrada(ArrayList<NeuronioEntrada> listaNeuronioEntrada) {
+        this.listaNeuronioEntrada = listaNeuronioEntrada;
+    }
+
+    public ArrayList<NeuronioOculto> getListaNeuronioOculto() {
+        return listaNeuronioOculto;
+    }
+
+    public void setListaNeuronioOculto(ArrayList<NeuronioOculto> listaNeuronioOculto) {
+        this.listaNeuronioOculto = listaNeuronioOculto;
+    }
+
+    public ArrayList<NeuronioSaida> getListaNeuronioSaida() {
+        return listaNeuronioSaida;
+    }
+
+    public void setListaNeuronioSaida(ArrayList<NeuronioSaida> listaNeuronioSaida) {
+        this.listaNeuronioSaida = listaNeuronioSaida;
+    }
+
+    public float getErro() {
+        return erro;
+    }
+
+    public void setErro(float erro) {
+        this.erro = erro;
+    }
+
+    public int getFuncaoTransferencia() {
+        return funcaoTransferencia;
+    }
+
+    public void setFuncaoTransferencia(int funcaoTransferencia) {
+        this.funcaoTransferencia = funcaoTransferencia;
+    }
+
+    public int getTipoParada() {
+        return tipoParada;
+    }
+
+    public void setTipoParada(int tipoParada) {
+        this.tipoParada = tipoParada;
+    }
+
+    public float getTaxaAprendizado() {
+        return taxaAprendizado;
+    }
+
+    public void setTaxaAprendizado(float taxaAprendizado) {
+        this.taxaAprendizado = taxaAprendizado;
+    }
+
+    public int[][] getMatrizConfusao() {
+        return matrizConfusao;
+    }
+
+    public void setMatrizConfusao(int[][] matrizConfusao) {
+        this.matrizConfusao = matrizConfusao;
+    }
+
+    public float[][] getMatrizAmostras() {
+        return matrizAmostras;
+    }
+
+    public void setMatrizAmostras(float[][] matrizAmostras) {
+        this.matrizAmostras = matrizAmostras;
+    }
+
+    public int getQuantidadeAmostras() {
+        return quantidadeAmostras;
+    }
+
+    public void setQuantidadeAmostras(int quantidadeAmostras) {
+        this.quantidadeAmostras = quantidadeAmostras;
+    }
+
+    public int getQuantidadeElementosCamadaOculta() {
+        return quantidadeElementosCamadaOculta;
+    }
+
+    public void setQuantidadeElementosCamadaOculta(int quantidadeElementosCamadaOculta) {
+        this.quantidadeElementosCamadaOculta = quantidadeElementosCamadaOculta;
+    }
+
+    public int getQuantidadeElementosCamadaEntrada() {
+        return quantidadeElementosCamadaEntrada;
+    }
+
+    public void setQuantidadeElementosCamadaEntrada(int quantidadeElementosCamadaEntrada) {
+        this.quantidadeElementosCamadaEntrada = quantidadeElementosCamadaEntrada;
+    }
+
+    public int getQuantidadeElementosCamadaSaida() {
+        return quantidadeElementosCamadaSaida;
+    }
+
+    public void setQuantidadeElementosCamadaSaida(int quantidadeElementosCamadaSaida) {
+        this.quantidadeElementosCamadaSaida = quantidadeElementosCamadaSaida;
+    }
+    
+    public String imprimirMatrizDeConfusao(){
+        String matrizImpressa ="";
+        
+        
+        for(int i=0;i<matrizConfusao[0].length;i++){
+            for(int j=0;j<matrizConfusao[0].length;j++){
+                matrizImpressa+=""+matrizConfusao[i][j]+" ";
+            }
+            matrizImpressa+='\n';
+        }
+        
+        return matrizImpressa;
+    }
 }
