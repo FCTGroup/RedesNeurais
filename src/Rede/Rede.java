@@ -191,7 +191,7 @@ public class Rede {
             }
             
             for(NeuronioOculto neuronio:listaNeuronioOculto){
-                
+                neuronio.calculaNET();
                 if(funcaoTransferencia == FUNCAO_LOGISTICA)
                     neuronio.calculaValorComFuncaoLogistica();
                 else if(funcaoTransferencia == FUNCAO_TANGENTE_HIPERBOLICA)
@@ -204,6 +204,7 @@ public class Rede {
             
             numeroNeuronio = 0;
             for(NeuronioSaida neuronio:listaNeuronioSaida){
+                neuronio.calculaNET();
                 if(funcaoTransferencia == FUNCAO_LOGISTICA)
                     neuronio.calculaValorComFuncaoLogistica();
                 else if(funcaoTransferencia == FUNCAO_TANGENTE_HIPERBOLICA)
