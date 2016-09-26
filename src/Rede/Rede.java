@@ -108,6 +108,12 @@ public class Rede {
         
         protected void atualizarConexaoNeuronios() {
           
+            for(NeuronioOculto neuronio:listaNeuronioOculto){
+                neuronio.criaListaDePesosAleatorios(quantidadeElementosCamadaEntrada);
+                neuronio.criarListaDeEntrada(quantidadeElementosCamadaEntrada);
+                neuronio.setListaNeuroniosCamadaSaida(listaNeuronioSaida);
+            }
+            
             for(NeuronioSaida neuronio:listaNeuronioSaida){
                 neuronio.atualizarListaDePesosAleatorios(quantidadeElementosCamadaOculta);
                 neuronio.atualizarListaDeEntrada(quantidadeElementosCamadaOculta);
@@ -465,8 +471,14 @@ public class Rede {
 
     void atualizarCamadaOculta() {
         int i = listaNeuronioOculto.size();
-        while(i < quantidadeElementosCamadaOculta)
-            listaNeuronioOculto.add(new NeuronioOculto(i++));
+        NeuronioOculto novoNeuronio;
+        while(i < quantidadeElementosCamadaOculta){
+            novoNeuronio = new NeuronioOculto(i++);
+            novoNeuronio.criaListaDePesosAleatorios(quantidadeElementosCamadaEntrada);
+            novoNeuronio.criarListaDeEntrada(quantidadeElementosCamadaEntrada);
+            listaNeuronioOculto.add(novoNeuronio);
+            
+        }
         
         while(i > quantidadeElementosCamadaOculta)
             listaNeuronioOculto.remove((i-- - 1));
