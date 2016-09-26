@@ -82,9 +82,9 @@ public class NeuronioOculto extends Neuronio {
         int sinal;
         float valor;
         for(int i = 0; i < quantidadeElementosCamadaEntrada; i++){
-            sinal = (int) Math.random();
+            sinal = (int) Math.random()*10;
             sinal = (int) Math.pow(-1,sinal);
-            valor = sinal *(float)Math.random();
+            valor = sinal * ((float)Math.random()/2);
             listaPesos.add(valor);
         }
     }
