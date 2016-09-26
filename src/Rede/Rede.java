@@ -75,6 +75,8 @@ public class Rede {
                 if(matrizAmostras[i][numeroDeColunas-1] > quantidadeDeClasses)
                     quantidadeDeClasses = (int) (matrizAmostras[i][numeroDeColunas-1]);
             
+            setQuantidadeAmostras(numeroDeLinhas);
+            
             //Calculado quantidade de Neuronios de Cada Camada
             setQuantidadeElementosCamadaEntrada(numeroDeColunas-1);
             setQuantidadeElementosCamadaSaida(quantidadeDeClasses);
@@ -88,6 +90,7 @@ public class Rede {
             setListaNeuronioEntrada();
             setListaNeuronioOculto();
             setListaNeuronioSaida();
+            
 	}
 
 	protected void criarConexaoNeuronios() {
@@ -197,8 +200,9 @@ public class Rede {
 	public void treinar(int quantidadeIteracoes) {
             int contadorDeIteracoes = 0;
             do{
-                for(int numeroAmostra = 0; numeroAmostra < quantidadeAmostras; numeroAmostra++)
+                for(int numeroAmostra = 0; numeroAmostra < quantidadeAmostras; numeroAmostra++){
                     iterar(numeroAmostra);
+                }
                 contadorDeIteracoes++;
             }while(contadorDeIteracoes < quantidadeIteracoes);
 	}
@@ -235,28 +239,26 @@ public class Rede {
 	}
 
     private void aplicarEntradasNosNeuronios(int iteracao) {
-        listaNeuronioEntrada.stream().map((neuronio) -> {
+        for(NeuronioEntrada neuronio:listaNeuronioEntrada){
             neuronio.setValor(
                     matrizAmostras[iteracao][neuronio.getNumeroIdentificador()]);
-                return neuronio;
-            }).forEach((neuronio) -> {
-                neuronio.atualizaProximaCamada();
-            });
+            neuronio.atualizaProximaCamada();
+        }
     } 
 
     private void calculaNETCamadaSaida() {
-        listaNeuronioSaida.stream().forEach((neuronio) -> {
-        neuronio.calculaNET();
-            });
+        for(NeuronioSaida neuronio:listaNeuronioSaida){
+            neuronio.calculaNET();
+        }
     }
 
     private void calculaErroCamadaOculta() {
-        listaNeuronioOculto.stream().forEach((neuronio) -> {
+        for(NeuronioOculto neuronio:listaNeuronioOculto){
             if(funcaoTransferencia == FUNCAO_LOGISTICA)
                 neuronio.calculaErroLogistico();
             else if(funcaoTransferencia == FUNCAO_TANGENTE_HIPERBOLICA)
                 neuronio.calculaErroTangenteHiperbolico();
-            });
+        }
     }
 
     private void atualizaPesoCamadaSaida() {
@@ -273,7 +275,7 @@ public class Rede {
     private void atualizaPesoCamadaOculta() {
         float novoPeso;
         for(NeuronioOculto neuronio:listaNeuronioOculto){
-                for(int posicaoLista = 0; posicaoLista < quantidadeElementosCamadaOculta; posicaoLista++){
+                for(int posicaoLista = 0; posicaoLista < quantidadeElementosCamadaEntrada; posicaoLista++){
                     novoPeso = neuronio.getPeso(posicaoLista);
                     novoPeso += taxaAprendizado*neuronio.getErro()*listaNeuronioEntrada.get(posicaoLista).getValor();
                     neuronio.setPeso(posicaoLista, novoPeso);
@@ -283,48 +285,46 @@ public class Rede {
 
     private void calculaErroDaRede() {
         erro = 0;
-        listaNeuronioSaida.stream().forEach((neuronio) -> {
+        for(NeuronioSaida neuronio:listaNeuronioSaida){
             erro += Math.pow(neuronio.getErro(),2);
-            });
             erro /= 2;
+        }
     }
 
     private void calculaNETCamadaOculta() {
-        listaNeuronioOculto.stream().forEach((neuronio) -> {
+        for(NeuronioOculto neuronio:listaNeuronioOculto){
             neuronio.calculaNET();
-            });
+        }
     }
 
     private void aplicaFuncaoTransferenciaCamadaOculta() {
-        listaNeuronioOculto.stream().map((neuronio) -> {
+        for(NeuronioOculto neuronio:listaNeuronioOculto){
             if(funcaoTransferencia == FUNCAO_LOGISTICA)
                 neuronio.calculaValorComFuncaoLogistica();
             else if(funcaoTransferencia == FUNCAO_TANGENTE_HIPERBOLICA)
                 neuronio.calculaValorComFuncaoTangenteHiperbolica();
-                return neuronio;
-            }).forEach((neuronio) -> {
-                neuronio.atualizaProximaCamada();
-            });
+            neuronio.atualizaProximaCamada();
+        }
     }
 
     private void calculaValorCamadaSaida() {
-        listaNeuronioSaida.stream().forEach((neuronio) -> {
+        for(NeuronioSaida neuronio:listaNeuronioSaida){
             if(funcaoTransferencia == FUNCAO_LOGISTICA)
                 neuronio.calculaValorComFuncaoLogistica();
             else if(funcaoTransferencia == FUNCAO_TANGENTE_HIPERBOLICA)
                 neuronio.calculaValorComFuncaoTangenteHiperbolica();
-            });
+        }
     }
 
     private void calculaErroCamadaSaida(int iteracao) {
-        listaNeuronioSaida.stream().forEach((neuronio) -> {
+        for(NeuronioSaida neuronio:listaNeuronioSaida){
             if(funcaoTransferencia == FUNCAO_LOGISTICA)
                 neuronio.calculaErroLogistico(
-                        (int)matrizAmostras[iteracao][quantidadeAmostras]);
+                        (int)matrizAmostras[iteracao][quantidadeElementosCamadaEntrada]);
             else if(funcaoTransferencia == FUNCAO_TANGENTE_HIPERBOLICA)
                 neuronio.calculaErroTangenteHiperbolico(
-                        (int)matrizAmostras[iteracao][quantidadeAmostras]);
-            });
+                        (int)matrizAmostras[iteracao][quantidadeElementosCamadaEntrada]);
+        }
     }
 
     public ArrayList<NeuronioEntrada> getListaNeuronioEntrada() {

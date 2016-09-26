@@ -380,6 +380,7 @@ public class UIPrincipal extends javax.swing.JFrame {
            }
 
            JOptionPane.showMessageDialog(null,"Treinamento Realizado");
+           definirTabela();
         }
     }//GEN-LAST:event_botTreinarActionPerformed
 

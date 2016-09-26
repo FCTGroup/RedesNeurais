@@ -90,7 +90,7 @@ public class NeuronioOculto extends Neuronio {
 
     void criarListaDeEntrada(int quantidadeElementosCamadaEntrada) {
         for(int i = 0; i < quantidadeElementosCamadaEntrada; i++)
-            listaPesos.add(1f);
+            listaEntrada.add(1f);
     }
 
 }

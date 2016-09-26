@@ -73,7 +73,7 @@ public class NeuronioSaida extends Neuronio {
 
     void criarListaDeEntrada(int quantidadeElementosCamadaOculta) {
         for(int i = 0; i < quantidadeElementosCamadaOculta; i++)
-            listaPesos.add(1f);
+            listaEntrada.add(1f);
     }
 
     void atualizarListaDePesosAleatorios(int quantidadeElementosCamadaOculta) {
@@ -93,10 +93,10 @@ public class NeuronioSaida extends Neuronio {
 
     void atualizarListaDeEntrada(int quantidadeElementosCamadaOculta) {
         for(int i = listaEntrada.size(); i < quantidadeElementosCamadaOculta; i++)
-            listaPesos.add(1f);
+            listaEntrada.add(1f);
         
         for(int i = listaEntrada.size(); i > quantidadeElementosCamadaOculta; i--)
-            listaPesos.remove(i-1);
+            listaEntrada.remove(i-1);
     }
 
 }
