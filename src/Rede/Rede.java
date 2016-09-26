@@ -457,14 +457,16 @@ public class Rede {
         rede+="\n";
         
         for(int i = 0; i < quantidadeElementosCamadaOculta; i++)
-            rede += (i!=0?",":"")+listaNeuronioOculto.get(i).getNumeroIdentificador();
+            rede += (i!=0?",":"")+listaNeuronioOculto.get(i).getNumeroIdentificador()+"("+listaNeuronioOculto.get(i)+")";
         
         rede+="\n";
         
         for(int i = 0; i < quantidadeElementosCamadaSaida; i++)
             rede += (i!=0?",":"")+listaNeuronioSaida.get(i).getNumeroIdentificador();
         
-        rede+= "------";
+        rede+="\n";
+        
+        rede+= "------\n";
         
         return rede;
     }

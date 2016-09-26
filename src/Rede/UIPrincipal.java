@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -34,7 +35,7 @@ public class UIPrincipal extends javax.swing.JFrame {
         botTreinar.setEnabled(false);
         realizarTesteBut.setEnabled(false);
         jButton2.setEnabled(false);
-        
+        iteracoesRadio.setSelected(true);
         
     }
     
@@ -74,6 +75,7 @@ public class UIPrincipal extends javax.swing.JFrame {
         botTreinar = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
         carregarArquivoTeste = new javax.swing.JButton();
         realizarTesteBut = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -126,13 +128,10 @@ public class UIPrincipal extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -141,11 +140,14 @@ public class UIPrincipal extends javax.swing.JFrame {
 
         jLabel6.setText("Erro Máximo da Rede:");
 
+        numeroIteracoesTxt.setText("50");
         numeroIteracoesTxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 numeroIteracoesTxtActionPerformed(evt);
             }
         });
+
+        erroMaxTxt.setText("1");
 
         botTreinar.setText("Treinar");
         botTreinar.addActionListener(new java.awt.event.ActionListener() {
@@ -168,6 +170,13 @@ public class UIPrincipal extends javax.swing.JFrame {
             }
         });
 
+        jButton3.setText("Atualizar valores da tabela na rede");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelOpcoesLayout = new javax.swing.GroupLayout(panelOpcoes);
         panelOpcoes.setLayout(panelOpcoesLayout);
         panelOpcoesLayout.setHorizontalGroup(
@@ -175,48 +184,51 @@ public class UIPrincipal extends javax.swing.JFrame {
             .addGroup(panelOpcoesLayout.createSequentialGroup()
                 .addGroup(panelOpcoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jSeparator1)
-                    .addComponent(jScrollPane1))
-                .addContainerGap())
-            .addGroup(panelOpcoesLayout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addGroup(panelOpcoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1)
+                    .addComponent(jScrollPane1)
                     .addGroup(panelOpcoesLayout.createSequentialGroup()
+                        .addGap(24, 24, 24)
                         .addGroup(panelOpcoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panelOpcoesLayout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(textTaxaAprendizado, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(panelOpcoesLayout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(18, 18, 18)
-                                .addGroup(panelOpcoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(erroMaximoRedeRadio)
-                                    .addComponent(iteracoesRadio))))
-                        .addGap(80, 80, 80)
-                        .addGroup(panelOpcoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton1)
                             .addGroup(panelOpcoesLayout.createSequentialGroup()
                                 .addGroup(panelOpcoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel6))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(panelOpcoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(numeroIteracoesTxt, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
-                                    .addComponent(erroMaxTxt)))
-                            .addGroup(panelOpcoesLayout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(panelOpcoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(botTreinar)
                                     .addGroup(panelOpcoesLayout.createSequentialGroup()
-                                        .addComponent(qtdNeuroniosCOTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel1)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButton2))))))
-                    .addGroup(panelOpcoesLayout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(comboOpParada, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(115, Short.MAX_VALUE))
+                                        .addComponent(textTaxaAprendizado, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(panelOpcoesLayout.createSequentialGroup()
+                                        .addComponent(jLabel3)
+                                        .addGap(18, 18, 18)
+                                        .addGroup(panelOpcoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(erroMaximoRedeRadio)
+                                            .addComponent(iteracoesRadio))))
+                                .addGap(80, 80, 80)
+                                .addGroup(panelOpcoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(panelOpcoesLayout.createSequentialGroup()
+                                        .addGroup(panelOpcoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel5)
+                                            .addComponent(jLabel6))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(panelOpcoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(numeroIteracoesTxt, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
+                                            .addComponent(erroMaxTxt)))
+                                    .addGroup(panelOpcoesLayout.createSequentialGroup()
+                                        .addComponent(jLabel4)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(panelOpcoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(botTreinar)
+                                            .addGroup(panelOpcoesLayout.createSequentialGroup()
+                                                .addComponent(qtdNeuroniosCOTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jButton2))))))
+                            .addGroup(panelOpcoesLayout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(comboOpParada, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 103, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelOpcoesLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         panelOpcoesLayout.setVerticalGroup(
             panelOpcoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -250,7 +262,8 @@ public class UIPrincipal extends javax.swing.JFrame {
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton3))
         );
 
         carregarArquivoTeste.setText("Carregar teste.csv");
@@ -304,7 +317,7 @@ public class UIPrincipal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -352,18 +365,22 @@ public class UIPrincipal extends javax.swing.JFrame {
     private void botTreinarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botTreinarActionPerformed
         //TODO PARTE QUE PEGA OS VALORES DE PESO DAS TABELAS
         
-        //SETANDO TAXA DE APRENDIZADO
-        this.redeNeural.setTaxaAprendizado(Float.parseFloat(this.textTaxaAprendizado.getText()));
-        //PARTE PARA COLOCAR NUMERO DE ITERAÇÕES OU ERRO MAXIMO
-       if(this.iteracoesRadio.isSelected()){
-           this.redeNeural.setTipoParada(redeNeural.PARADA_POR_ITERACAO);
-           this.redeNeural.treinar(Integer.parseInt(this.numeroIteracoesTxt.getText()));
-       }else{
-           this.redeNeural.setTipoParada(redeNeural.PARADA_POR_ERRO);
-           this.redeNeural.treinar(Float.parseFloat(this.erroMaxTxt.getText()));
-       }
-       
-       JOptionPane.showMessageDialog(null,"Treinamento Realizado");
+        if(comboOpParada.getSelectedIndex() == 0 )
+            JOptionPane.showMessageDialog(null, "É necessário selecionar um tipo de parada", "Erro", JOptionPane.ERROR_MESSAGE);
+        else{
+            //SETANDO TAXA DE APRENDIZADO
+            this.redeNeural.setTaxaAprendizado(Float.parseFloat(this.textTaxaAprendizado.getText()));
+            //PARTE PARA COLOCAR NUMERO DE ITERAÇÕES OU ERRO MAXIMO
+           if(this.iteracoesRadio.isSelected()){
+               this.redeNeural.setTipoParada(redeNeural.PARADA_POR_ITERACAO);
+               this.redeNeural.treinar(Integer.parseInt(this.numeroIteracoesTxt.getText()));
+           }else{
+               this.redeNeural.setTipoParada(redeNeural.PARADA_POR_ERRO);
+               this.redeNeural.treinar(Float.parseFloat(this.erroMaxTxt.getText()));
+           }
+
+           JOptionPane.showMessageDialog(null,"Treinamento Realizado");
+        }
     }//GEN-LAST:event_botTreinarActionPerformed
 
     private void carregarArquivoTesteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_carregarArquivoTesteActionPerformed
@@ -400,6 +417,7 @@ public class UIPrincipal extends javax.swing.JFrame {
                 iniciarRedeNeural(url);
                 liberarComponentes();
                 qtdNeuroniosCOTxt.setText(String.valueOf(redeNeural.getQuantidadeElementosCamadaOculta()));
+                definirTabela();
                 System.out.println(redeNeural.imprimirRede());
             } catch (IOException ex) {
                 Logger.getLogger(UIPrincipal.class.getName()).log(Level.SEVERE, null, ex);
@@ -414,17 +432,49 @@ public class UIPrincipal extends javax.swing.JFrame {
             redeNeural.setQuantidadeElementosCamadaOculta(Integer.parseInt(qtdNeuroniosCOTxt.getText()));
             redeNeural.atualizarCamadaOculta();
             redeNeural.atualizarConexaoNeuronios();
-            System.out.println(redeNeural.imprimirRede());
+            definirTabela();
+                        System.out.println(redeNeural.imprimirRede());
+            
             
         }catch(NumberFormatException e){
             JOptionPane.showMessageDialog(null, "Quantidade inválida", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        
+        NeuronioOculto neuronio;
+        float novoPeso;
+        for(int i = 0; i < jTable1.getRowCount(); i++)
+            for(int j = 0; j < jTable1.getColumnCount(); j++){
+                neuronio = redeNeural.getListaNeuronioOculto().get(i);
+                novoPeso = Float.parseFloat((String.valueOf(jTable1.getValueAt(i, j))));
+                neuronio.setPeso(j, novoPeso);
+            }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
     public void liberarComponentes(){
         qtdNeuroniosCOTxt.setEnabled(true);
         botTreinar.setEnabled(true);
         jButton2.setEnabled(true);
+    }
+    
+    public void definirTabela(){
+        DefaultTableModel DTM = new DefaultTableModel();
+        
+        for(NeuronioEntrada neuronio:redeNeural.getListaNeuronioEntrada())
+            DTM.addColumn("Peso x"+neuronio.numeroIdentificador);
+        
+        Float[] pesos = new Float[redeNeural.getQuantidadeElementosCamadaEntrada()];
+        int i;
+        for(NeuronioOculto neuronio:redeNeural.getListaNeuronioOculto()){
+            i = 0;
+            while(i < redeNeural.getQuantidadeElementosCamadaEntrada())
+                pesos[i] = neuronio.getPeso(i++);
+            DTM.addRow(pesos);
+        }
+        
+        jTable1.setModel(DTM);
     }
     
     /**
@@ -476,6 +526,7 @@ public class UIPrincipal extends javax.swing.JFrame {
     private javax.swing.JRadioButton iteracoesRadio;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
