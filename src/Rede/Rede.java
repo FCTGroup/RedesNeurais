@@ -31,7 +31,11 @@ public class Rede {
 
 	private float matrizAmostras[][];
         
+        private float matrizAmostrasTeste[][];
+        
         private int quantidadeAmostras;
+        
+        private int quantidadeAmostrasTeste;
         
         private int quantidadeElementosCamadaOculta;
         
@@ -126,16 +130,20 @@ public class Rede {
 	public void carregaArquivoTeste(String url) throws IOException {
             LeitorDeCSV leitorTreinamento = new LeitorDeCSV();
             ArrayList<Integer[]> valoresTreinamento = leitorTreinamento.lerArquivoDeValores(url);
-            int numeroDeLinhas=valoresTreinamento.get(0).length, numeroDeColunas=valoresTreinamento.size();
+            int numeroDeLinhas=valoresTreinamento.size();
+            int numeroDeColunas=valoresTreinamento.get(0).length;
         
-             this.matrizAmostras= new float[numeroDeLinhas][numeroDeColunas]; 
+             this.matrizAmostrasTeste= new float[numeroDeLinhas][numeroDeColunas]; 
             //LACO PRA CONVERTER A ESTRUTURA matriz array normal
                 for(int i=0;i<numeroDeLinhas;i++){
                     Integer[] valores = valoresTreinamento.get(i);
                     for(int j=0;j<numeroDeColunas;j++){
-                        this.matrizAmostras[i][j]= valores[j];
+                        this.matrizAmostrasTeste[i][j]= valores[j];
                     }
                 }
+                
+            
+            quantidadeAmostrasTeste = numeroDeLinhas;    
 	}
 
 	public void testar() {
@@ -143,27 +151,32 @@ public class Rede {
             float[] vetorEntrada;
             float resultadoAtual;
             int posicaoResultadoDaAmostra = quantidadeElementosCamadaEntrada;
-            int posicaoResultadoAtual;
-            int resultadoEsperado;
-            int resultadoObtido;
+            int posicaoResultadoAtual = 0;
+            int resultadoEsperado = 0;
+            int posicaoResultadoObtido = 0;
+            matrizConfusao = new int[quantidadeElementosCamadaSaida][quantidadeElementosCamadaSaida];
             
-            for(int numeroAmostra = 0; numeroAmostra < quantidadeAmostras; numeroAmostra++){
-                vetorEntrada = matrizAmostras[numeroAmostra];
+            for(int numeroAmostra = 0; numeroAmostra < quantidadeAmostrasTeste; numeroAmostra++){
+                vetorEntrada = matrizAmostrasTeste[numeroAmostra];
+                
                 vetorResultado = calcular(vetorEntrada);
                 
-                resultadoEsperado = (int)matrizAmostras[numeroAmostra][posicaoResultadoDaAmostra];
+                resultadoEsperado = (int)matrizAmostrasTeste[numeroAmostra][posicaoResultadoDaAmostra];
                 
                 posicaoResultadoAtual = 0;
                 resultadoAtual = 0;
-                resultadoObtido = 0;
+                posicaoResultadoObtido = 0;
+                System.out.println("\n");
                 while(posicaoResultadoAtual < quantidadeElementosCamadaSaida){
+                    System.out.print((posicaoResultadoAtual!=0?",":"")+vetorResultado[posicaoResultadoAtual]);
+                    
                     if(vetorResultado[posicaoResultadoAtual] > resultadoAtual){
                         resultadoAtual = vetorResultado[posicaoResultadoAtual];
-                        resultadoObtido = posicaoResultadoAtual;
+                        posicaoResultadoObtido = posicaoResultadoAtual;
                     }
                     posicaoResultadoAtual++;
                 }
-                matrizConfusao[resultadoEsperado][resultadoObtido]++;//isto esta certo? a matriz recebe ++, ta estranho 
+                matrizConfusao[resultadoEsperado-1][posicaoResultadoObtido]++;//isto esta certo? a matriz recebe ++, ta estranho 
             }
 	}
         
@@ -178,11 +191,15 @@ public class Rede {
             }
             
             for(NeuronioOculto neuronio:listaNeuronioOculto){
+                
                 if(funcaoTransferencia == FUNCAO_LOGISTICA)
                     neuronio.calculaValorComFuncaoLogistica();
                 else if(funcaoTransferencia == FUNCAO_TANGENTE_HIPERBOLICA)
                     neuronio.calculaValorComFuncaoTangenteHiperbolica();
+                
                 neuronio.atualizaProximaCamada();
+                
+                
             }
             
             numeroNeuronio = 0;

@@ -35,6 +35,7 @@ public class UIPrincipal extends javax.swing.JFrame {
         botTreinar.setEnabled(false);
         realizarTesteBut.setEnabled(false);
         jButton2.setEnabled(false);
+        realizarTesteBut.setEnabled(false);
         iteracoesRadio.setSelected(true);
         
     }
@@ -385,10 +386,21 @@ public class UIPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_botTreinarActionPerformed
 
     private void carregarArquivoTesteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_carregarArquivoTesteActionPerformed
-        try {
-            this.redeNeural.carregaArquivoTeste("../Arquivos/teste.csv");
-        } catch (IOException ex) {
-            Logger.getLogger(UIPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                JFileChooser JFC = new JFileChooser();  
+        FileNameExtensionFilter extensionFilter = new FileNameExtensionFilter("CSV", "csv");
+	JFC.setFileFilter(extensionFilter);
+	JFC.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        JFC.setMultiSelectionEnabled(false);
+	if(JFC.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
+            String url = JFC.getSelectedFile().getAbsolutePath();
+            try {
+                redeNeural.carregaArquivoTeste(url);
+                realizarTesteBut.setEnabled(true);
+                
+            } catch (IOException ex) {
+                Logger.getLogger(UIPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
         }
     }//GEN-LAST:event_carregarArquivoTesteActionPerformed
 

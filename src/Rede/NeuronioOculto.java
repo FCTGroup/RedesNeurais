@@ -38,7 +38,7 @@ public class NeuronioOculto extends Neuronio {
     }
 
     public void calculaValorComFuncaoLogistica() {
-        valor = (float)(1.0f/(1 + Math.pow(Math.E, -net)));
+        valor = (float)(1.0/(1 + Math.pow(Math.E, -net)));
     }
     
     public void calculaValorComFuncaoTangenteHiperbolica() {
