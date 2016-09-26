@@ -9,7 +9,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -21,7 +23,6 @@ public class UIPrincipal extends javax.swing.JFrame {
      * Creates new form UIPrincipal
      */
     public UIPrincipal() throws IOException {
-        iniciarRedeNeural();
         
         //MUDANDO AS CONFIGURAÇOES DO RADIO GROUP
         //this.condicaoDeParadaGroup.add(this.iteracoesRadio);
@@ -29,13 +30,17 @@ public class UIPrincipal extends javax.swing.JFrame {
         //this.condicaoDeParadaGroup.clearSelection();
         //
         initComponents();
+        qtdNeuroniosCOTxt.setEnabled(false);
+        botTreinar.setEnabled(false);
+        realizarTesteBut.setEnabled(false);
+        jButton2.setEnabled(false);
         
         
     }
     
-    public void iniciarRedeNeural() throws IOException{
+    public void iniciarRedeNeural(String url) throws IOException{
         redeNeural = new Rede();
-        redeNeural.carregaArquivoTeste("../Arquivos/treinamento.csv");
+        redeNeural.carregaArquivoTreinamento(url);
         redeNeural.criarConexaoNeuronios();
         
     }
@@ -67,6 +72,8 @@ public class UIPrincipal extends javax.swing.JFrame {
         numeroIteracoesTxt = new javax.swing.JTextField();
         erroMaxTxt = new javax.swing.JTextField();
         botTreinar = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         carregarArquivoTeste = new javax.swing.JButton();
         realizarTesteBut = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -77,6 +84,7 @@ public class UIPrincipal extends javax.swing.JFrame {
 
         jLabel1.setText("Taxa de Aprendizado :");
 
+        textTaxaAprendizado.setText("1");
         textTaxaAprendizado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 textTaxaAprendizadoActionPerformed(evt);
@@ -146,6 +154,20 @@ public class UIPrincipal extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setText("Carregar CSV de treinamento");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Atualizar Quantidade");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelOpcoesLayout = new javax.swing.GroupLayout(panelOpcoes);
         panelOpcoes.setLayout(panelOpcoesLayout);
         panelOpcoesLayout.setHorizontalGroup(
@@ -158,6 +180,7 @@ public class UIPrincipal extends javax.swing.JFrame {
             .addGroup(panelOpcoesLayout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addGroup(panelOpcoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1)
                     .addGroup(panelOpcoesLayout.createSequentialGroup()
                         .addGroup(panelOpcoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelOpcoesLayout.createSequentialGroup()
@@ -170,7 +193,7 @@ public class UIPrincipal extends javax.swing.JFrame {
                                 .addGroup(panelOpcoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(erroMaximoRedeRadio)
                                     .addComponent(iteracoesRadio))))
-                        .addGap(47, 47, 47)
+                        .addGap(80, 80, 80)
                         .addGroup(panelOpcoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelOpcoesLayout.createSequentialGroup()
                                 .addGroup(panelOpcoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -185,23 +208,28 @@ public class UIPrincipal extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(panelOpcoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(botTreinar)
-                                    .addComponent(qtdNeuroniosCOTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addGroup(panelOpcoesLayout.createSequentialGroup()
+                                        .addComponent(qtdNeuroniosCOTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jButton2))))))
                     .addGroup(panelOpcoesLayout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(comboOpParada, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(291, Short.MAX_VALUE))
+                .addContainerGap(115, Short.MAX_VALUE))
         );
         panelOpcoesLayout.setVerticalGroup(
             panelOpcoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelOpcoesLayout.createSequentialGroup()
-                .addContainerGap()
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelOpcoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(textTaxaAprendizado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
-                    .addComponent(qtdNeuroniosCOTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(qtdNeuroniosCOTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2))
+                .addGap(14, 14, 14)
                 .addGroup(panelOpcoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addComponent(comboOpParada, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -276,7 +304,7 @@ public class UIPrincipal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -360,6 +388,45 @@ public class UIPrincipal extends javax.swing.JFrame {
             this.redeNeural.setQuantidadeElementosCamadaOculta(Integer.parseInt(this.qtdNeuroniosCOTxt.getText()));
     }//GEN-LAST:event_qtdNeuroniosCOTxtActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        JFileChooser JFC = new JFileChooser();  
+        FileNameExtensionFilter extensionFilter = new FileNameExtensionFilter("CSV", "csv");
+	JFC.setFileFilter(extensionFilter);
+	JFC.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        JFC.setMultiSelectionEnabled(false);
+	if(JFC.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
+            String url = JFC.getSelectedFile().getAbsolutePath();
+            try {
+                iniciarRedeNeural(url);
+                liberarComponentes();
+                qtdNeuroniosCOTxt.setText(String.valueOf(redeNeural.getQuantidadeElementosCamadaOculta()));
+                System.out.println(redeNeural.imprimirRede());
+            } catch (IOException ex) {
+                Logger.getLogger(UIPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+            
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        try{
+            redeNeural.setQuantidadeElementosCamadaOculta(Integer.parseInt(qtdNeuroniosCOTxt.getText()));
+            redeNeural.atualizarCamadaOculta();
+            redeNeural.atualizarConexaoNeuronios();
+            System.out.println(redeNeural.imprimirRede());
+            
+        }catch(NumberFormatException e){
+            JOptionPane.showMessageDialog(null, "Quantidade inválida", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    public void liberarComponentes(){
+        qtdNeuroniosCOTxt.setEnabled(true);
+        botTreinar.setEnabled(true);
+        jButton2.setEnabled(true);
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -407,6 +474,8 @@ public class UIPrincipal extends javax.swing.JFrame {
     private javax.swing.JTextField erroMaxTxt;
     private javax.swing.JRadioButton erroMaximoRedeRadio;
     private javax.swing.JRadioButton iteracoesRadio;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

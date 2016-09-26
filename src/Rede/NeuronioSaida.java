@@ -59,5 +59,44 @@ public class NeuronioSaida extends Neuronio {
     public float getErro(){
         return erro;
     }
+    
+    void criaListaDePesosAleatorios(int quantidadeElementosCamadaOculta) {
+        int sinal;
+        float valor;
+        for(int i = 0; i < quantidadeElementosCamadaOculta; i++){
+            sinal = (int) Math.random();
+            sinal = (int) Math.pow(-1,sinal);
+            valor = sinal *(float)Math.random();
+            listaPesos.add(valor);
+        }
+    }
+
+    void criarListaDeEntrada(int quantidadeElementosCamadaOculta) {
+        for(int i = 0; i < quantidadeElementosCamadaOculta; i++)
+            listaPesos.add(1f);
+    }
+
+    void atualizarListaDePesosAleatorios(int quantidadeElementosCamadaOculta) {
+        int sinal;
+        float valor;
+        for(int i = listaPesos.size(); i < quantidadeElementosCamadaOculta; i++){
+            sinal = (int) Math.random();
+            sinal = (int) Math.pow(-1,sinal);
+            valor = sinal *(float)Math.random();
+            listaPesos.add(valor);
+        }
+        
+        for(int i = listaPesos.size(); i > quantidadeElementosCamadaOculta; i--){
+            listaPesos.remove(i-1);
+        }        
+    }
+
+    void atualizarListaDeEntrada(int quantidadeElementosCamadaOculta) {
+        for(int i = listaEntrada.size(); i < quantidadeElementosCamadaOculta; i++)
+            listaPesos.add(1f);
+        
+        for(int i = listaEntrada.size(); i > quantidadeElementosCamadaOculta; i--)
+            listaPesos.remove(i-1);
+    }
 
 }

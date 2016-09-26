@@ -39,10 +39,10 @@ public class LeitorDeCSV {
             
             //SEMPRE O ULTIMO VALOR DA LINHA É O VALOR ESPERADO(VALOR DE CLASSE)
             matrizDeValores.add(new Integer[quantidadeDeValoresPorLinha]);
-            contadorDeLinhas ++;
             for(int j=0;j<valores.length;j++){
                 matrizDeValores.get(contadorDeLinhas)[j]=Integer.parseInt(valores[j]);
             }
+            contadorDeLinhas ++;
             
             
         }        

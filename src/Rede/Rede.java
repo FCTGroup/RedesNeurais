@@ -58,7 +58,8 @@ public class Rede {
 	public void carregaArquivoTreinamento(String url) throws IOException {
             LeitorDeCSV leitorTreinamento = new LeitorDeCSV();
             ArrayList<Integer[]> valoresTreinamento = leitorTreinamento.lerArquivoDeValores(url);
-            int numeroDeLinhas=valoresTreinamento.get(0).length, numeroDeColunas=valoresTreinamento.size();
+            int numeroDeColunas=valoresTreinamento.get(0).length;
+            int numeroDeLinhas=valoresTreinamento.size();
         
              this.matrizAmostras= new float[numeroDeLinhas][numeroDeColunas]; 
             //LACO PRA CONVERTER A ESTRUTURA matriz array normal
@@ -69,17 +70,48 @@ public class Rede {
                     }
                 }
             //
+            int quantidadeDeClasses = 0;
+            for(int i = 0; i < numeroDeLinhas; i++)
+                if(matrizAmostras[i][numeroDeColunas-1] > quantidadeDeClasses)
+                    quantidadeDeClasses = (int) (matrizAmostras[i][numeroDeColunas-1]);
             
             //Calculado quantidade de Neuronios de Cada Camada
-            this.quantidadeElementosCamadaEntrada=numeroDeColunas-1;
-            this.quantidadeElementosCamadaOculta = this.quantidadeElementosCamadaEntrada*2;
-            this.quantidadeElementosCamadaSaida =this.quantidadeElementosCamadaEntrada;
+            setQuantidadeElementosCamadaEntrada(numeroDeColunas-1);
+            setQuantidadeElementosCamadaSaida(quantidadeDeClasses);
+            setQuantidadeElementosCamadaOculta(
+                    (int) Math.round(
+                            Math.pow(this.quantidadeElementosCamadaEntrada*this.quantidadeElementosCamadaSaida,1f/2f)
+                    )
+            );
             
             //TODO CRIAR A CONEXAO DOS NEURONIOS
+            setListaNeuronioEntrada();
+            setListaNeuronioOculto();
+            setListaNeuronioSaida();
 	}
 
-	public void criarConexaoNeuronios() {
-
+	protected void criarConexaoNeuronios() {
+            for(NeuronioEntrada neuronio:listaNeuronioEntrada)
+                neuronio.setListaNeuroniosCamadaOculta(listaNeuronioOculto);
+            
+            for(NeuronioOculto neuronio:listaNeuronioOculto){
+                neuronio.criaListaDePesosAleatorios(quantidadeElementosCamadaEntrada);
+                neuronio.criarListaDeEntrada(quantidadeElementosCamadaEntrada);
+                neuronio.setListaNeuroniosCamadaSaida(listaNeuronioSaida);
+            }
+            
+            for(NeuronioSaida neuronio:listaNeuronioSaida){
+                neuronio.criaListaDePesosAleatorios(quantidadeElementosCamadaOculta);
+                neuronio.criarListaDeEntrada(quantidadeElementosCamadaOculta);
+            }
+	}
+        
+        protected void atualizarConexaoNeuronios() {
+          
+            for(NeuronioSaida neuronio:listaNeuronioSaida){
+                neuronio.atualizarListaDePesosAleatorios(quantidadeElementosCamadaOculta);
+                neuronio.atualizarListaDeEntrada(quantidadeElementosCamadaOculta);
+            }
 	}
 
 	public void carregaArquivoTeste(String url) throws IOException {
@@ -208,7 +240,7 @@ public class Rede {
 
     private void calculaNETCamadaSaida() {
         listaNeuronioSaida.stream().forEach((neuronio) -> {
-            neuronio.calculaNET();
+        neuronio.calculaNET();
             });
     }
 
@@ -293,24 +325,27 @@ public class Rede {
         return listaNeuronioEntrada;
     }
 
-    public void setListaNeuronioEntrada(ArrayList<NeuronioEntrada> listaNeuronioEntrada) {
-        this.listaNeuronioEntrada = listaNeuronioEntrada;
+    private void setListaNeuronioEntrada() {
+        for(int i = 0; i < quantidadeElementosCamadaEntrada; i++)
+            listaNeuronioEntrada.add(new NeuronioEntrada(i));
     }
 
     public ArrayList<NeuronioOculto> getListaNeuronioOculto() {
         return listaNeuronioOculto;
     }
 
-    public void setListaNeuronioOculto(ArrayList<NeuronioOculto> listaNeuronioOculto) {
-        this.listaNeuronioOculto = listaNeuronioOculto;
+    private void setListaNeuronioOculto() {
+        for(int i = 0; i < quantidadeElementosCamadaOculta; i++)
+            listaNeuronioOculto.add(new NeuronioOculto(i));
     }
 
     public ArrayList<NeuronioSaida> getListaNeuronioSaida() {
         return listaNeuronioSaida;
     }
 
-    public void setListaNeuronioSaida(ArrayList<NeuronioSaida> listaNeuronioSaida) {
-        this.listaNeuronioSaida = listaNeuronioSaida;
+    private void setListaNeuronioSaida() {
+        for(int i = 0; i < quantidadeElementosCamadaSaida; i++)
+            listaNeuronioSaida.add(new NeuronioSaida(i));
     }
 
     public float getErro() {
@@ -405,5 +440,36 @@ public class Rede {
         }
         
         return matrizImpressa;
+    }
+    
+    public String imprimirRede(){
+        String rede = "----";
+        
+        for(int i = 0; i < quantidadeElementosCamadaEntrada; i++)
+            rede += (i!=0?",":"")+listaNeuronioEntrada.get(i).getNumeroIdentificador();
+        
+        rede+="\n";
+        
+        for(int i = 0; i < quantidadeElementosCamadaOculta; i++)
+            rede += (i!=0?",":"")+listaNeuronioOculto.get(i).getNumeroIdentificador();
+        
+        rede+="\n";
+        
+        for(int i = 0; i < quantidadeElementosCamadaSaida; i++)
+            rede += (i!=0?",":"")+listaNeuronioSaida.get(i).getNumeroIdentificador();
+        
+        rede+= "------";
+        
+        return rede;
+    }
+
+    void atualizarCamadaOculta() {
+        int i = listaNeuronioOculto.size();
+        while(i < quantidadeElementosCamadaOculta)
+            listaNeuronioOculto.add(new NeuronioOculto(i++));
+        
+        while(i > quantidadeElementosCamadaOculta)
+            listaNeuronioOculto.remove((i-- - 1));
+        
     }
 }
