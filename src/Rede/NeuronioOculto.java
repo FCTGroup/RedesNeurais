@@ -38,11 +38,11 @@ public class NeuronioOculto extends Neuronio {
     }
 
     public void calculaValorComFuncaoLogistica() {
-        valor = (float)(1.0/(1 + Math.pow(Math.E, -net)));
+        valor = (float)(1.0/(float)(1 + Math.pow(Math.E, -net)));
     }
     
     public void calculaValorComFuncaoTangenteHiperbolica() {
-        valor = (float)((1 - Math.pow(Math.E, -2*net))/(1 + Math.pow(Math.E, -2*net)));
+        valor = (float)((1 - Math.pow(Math.E, -2*net))/(float)(1 + Math.pow(Math.E, -2*net)));
     }
     
     public void calculaNET() {
@@ -83,7 +83,7 @@ public class NeuronioOculto extends Neuronio {
         float valor;
         for(int i = 0; i < quantidadeElementosCamadaEntrada; i++){
             sinal = Math.random()>0.5f?1:-1;
-            valor = sinal * ((float)Math.random()/2);
+            valor = sinal * ((float)Math.random()/(float)2);
             listaPesos.add(valor);
         }
     }

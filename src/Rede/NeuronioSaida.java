@@ -31,11 +31,11 @@ public class NeuronioSaida extends Neuronio {
     }
 
     public void calculaValorComFuncaoLogistica() {
-        valor = (float)(1.0f/(1 + Math.pow(Math.E, -net)));
+        valor = (float)(1.0f/(float)(1 + Math.pow(Math.E, -net)));
     }
     
     public void calculaValorComFuncaoTangenteHiperbolica() {
-        valor = (float)((1 - Math.pow(Math.E, -2*net))/(1 + Math.pow(Math.E, -2*net)));
+        valor = (float)((1 - Math.pow(Math.E, -2*net))/(float)(1 + Math.pow(Math.E, -2*net)));
     }
 
     public void calculaNET() {
