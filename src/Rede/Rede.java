@@ -302,11 +302,11 @@ public class Rede {
     }
 
     private void calculaErroDaRede() {
-        erro = 0;
+        erro = 0f;
         for(NeuronioSaida neuronio:listaNeuronioSaida){
             erro += Math.pow(neuronio.getErro(),2);
-            erro /= 2;
         }
+        erro /= 2;
     }
 
     private void calculaNETCamadaOculta() {
